@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <title>🎄 聖誕動感大作戰 🎅</title>
+      <link
+         href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&family=Noto+Sans+HK:wght@500;700&display=swap"
+         rel="stylesheet">
+      <style>
+         :root {
+         --shin-red: #E63946;
+         --shin-yellow: #FFD166;
+         --shin-blue: #00B4D8;
+         --paper-white: rgba(255, 255, 255, 0.94);
+         }
+         body {
+         font-family: 'M PLUS Rounded 1c', 'Noto Sans HK', sans-serif;
+         background-color: #222;
+         margin: 0;
+         display: flex;
+         justify-content: center;
+         overflow-x: hidden;
+         -webkit-font-smoothing: antialiased;
+         }
+         /* 容器 */
+         .phone-container {
+         width: 100%;
+         max-width: 414px;
+         min-height: 100vh;
+         background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjTmoarBDfro1TvPjaN4NWPSpz0RBYCIjx0Q&s0');
+         padding: 15px;
+         box-sizing: border-box;
+         position: relative;
+         padding-bottom: 90px;
+         }
+         /* Header & Tabs */
+         .header-section {
+         text-align: center;
+         background: var(--paper-white);
+         border: 4px solid #333;
+         padding: 15px;
+         border-radius: 30px;
+         box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+         margin-bottom: 20px;
+         }
+         .header-section h1 {
+         color: var(--shin-red);
+         margin: 0;
+         font-size: 1.8rem;
+         text-shadow: 2px 2px 0 var(--shin-yellow);
+         }
+         .tabs {
+         display: flex;
+         justify-content: center;
+         gap: 10px;
+         margin-bottom: 20px;
+         }
+         .tab-btn {
+         background: white;
+         border: 3px solid #333;
+         padding: 10px 15px;
+         border-radius: 20px;
+         font-weight: 700;
+         cursor: pointer;
+         box-shadow: 3px 3px 0 #333;
+         transition: 0.2s;
+         }
+         .tab-btn.active {
+         background: var(--shin-yellow);
+         transform: translate(2px, 2px);
+         box-shadow: 1px 1px 0 #333;
+         }
+         /* 卡片設計 */
+         .day-content {
+         display: none;
+         }
+         .day-content.active {
+         display: block;
+         animation: fadeIn 0.4s ease;
+         }
+         @keyframes fadeIn {
+         from {
+         opacity: 0;
+         transform: translateY(10px);
+         }
+         to {
+         opacity: 1;
+         transform: translateY(0);
+         }
+         }
+         .event-card {
+         background: var(--paper-white);
+         border: 3px solid #333;
+         margin-bottom: 25px;
+         padding: 18px;
+         position: relative;
+         border-radius: 25px;
+         box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+         cursor: pointer;
+         transition: transform 0.1s;
+         }
+         .event-card:active {
+         transform: scale(0.96);
+         }
+         .time-badge {
+         position: absolute;
+         top: -15px;
+         left: 15px;
+         background: var(--shin-red);
+         color: white;
+         padding: 5px 15px;
+         border: 3px solid #333;
+         border-radius: 30px;
+         font-weight: 700;
+         font-size: 0.85rem;
+         transform: rotate(-3deg);
+         }
+         .card-title {
+         font-size: 1.2rem;
+         color: var(--shin-blue);
+         margin: 10px 0 8px 0;
+         font-weight: 700;
+         }
+         .card-desc {
+         font-size: 0.95rem;
+         color: #333;
+         line-height: 1.5;
+         font-weight: 500;
+         }
+         .photo-box {
+         width: 99%;
+         height: 180px;
+         background: #eee;
+         border: 2px solid #333;
+         margin: 12px 0;
+         border-radius: 20px;
+         overflow: hidden;
+         }
+         .photo-box img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         display: block;
+         }
+         /* 詳細頁面 (Overlay) */
+         .detail-page {
+         position: fixed;
+         top: 0;
+         left: 50%;
+         transform: translateX(-50%) translateY(100%);
+         width: 100%;
+         max-width: 414px;
+         height: 100%;
+         /* 修改這裡：使用與外層相同的背景圖 */
+         background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjTmoarBDfro1TvPjaN4NWPSpz0RBYCIjx0Q&s0');
+         background-position: center;
+         /* 居中對齊 */
+         z-index: 1000;
+         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+         overflow-y: auto;
+         box-sizing: border-box;
+         padding: 30px 20px;
+         }
+         /* 為了讓背景上的文字更清晰，建議給內容容器加一個微透明底色 */
+         #detailContent {
+         background: rgba(255, 255, 255, 0.85);
+         /* 半透明白色背景 */
+         padding: 20px;
+         border-radius: 25px;
+         border: 3px solid #333;
+         box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+         }
+         .detail-page.active {
+         transform: translateX(-50%) translateY(0);
+         }
+         .back-btn {
+         background: var(--shin-yellow);
+         border: 3px solid #333;
+         padding: 10px 25px;
+         border-radius: 50px;
+         font-weight: 700;
+         margin-bottom: 25px;
+         display: inline-block;
+         cursor: pointer;
+         box-shadow: 3px 3px 0 #333;
+         }
+         .detail-title {
+         color: var(--shin-red);
+         font-size: 1.6rem;
+         margin-bottom: 20px;
+         border-bottom: 5px solid var(--shin-yellow);
+         display: inline-block;
+         }
+         .detail-body {
+         font-size: 1.05rem;
+         line-height: 1.8;
+         color: #444;
+         }
+         .shin-box {
+         background: #fff9e6;
+         border: 3px dashed var(--shin-blue);
+         padding: 15px;
+         border-radius: 20px;
+         margin-top: 20px;
+         position: relative;
+         }
+         .footer-nav {
+         position: fixed;
+         bottom: 15px;
+         left: 50%;
+         transform: translateX(-50%);
+         background: white;
+         border: 3px solid #333;
+         padding: 12px 30px;
+         border-radius: 40px;
+         display: flex;
+         gap: 35px;
+         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+         z-index: 100;
+         }
+         /* 內頁專用波浪路徑容器 */
+         .inner-route-container {
+         background: #fdfdfd;
+         border: 3px solid #333;
+         border-radius: 20px;
+         margin: 10px 0 25px 0;
+         position: relative;
+         height: 100px;
+         }
+         /* 1. 統一內外層路徑容器的基準 */
+         .route-map-container,
+         .inner-route-container {
+         background: #fdfdfd;
+         border: 3px solid #333;
+         border-radius: 20px;
+         margin: 10px 0 25px 0;
+         position: relative;
+         height: 100px;
+         /* 統一高度 */
+         overflow: hidden;
+         display: flex;
+         align-items: center;
+         /* 讓內部的 SVG 或 Track 垂直居中 */
+         }
+         /* 統一所有小白的動畫設定 */
+         .running-shiro,
+         .inner-shiro {
+         position: absolute;
+         width: 38px !important;
+         height: auto !important;
+         z-index: 100;
+         transform: translateX(-50%);
+         /* 統一呼叫 shiro-hop */
+         animation: shiro-hop 0.6s infinite ease-in-out;
+         transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+         }
+         /* 3. 確保 SVG 內部路徑不會被壓縮 */
+         .wave-svg {
+         width: 100%;
+         height: 100%;
+         position: absolute;
+         top: 0;
+         left: 0;
+         }
+         .wave-path-static {
+         fill: none;
+         stroke: var(--shin-blue);
+         stroke-width: 3;
+         stroke-dasharray: 8, 8;
+         }
+         .svg-text {
+         font-size: 11px;
+         font-weight: 700;
+         fill: #333;
+         font-family: 'M PLUS Rounded 1c', sans-serif;
+         }
+         /* 1. 讓路線容器有固定高度並水平居中 */
+         .route-track {
+         position: relative;
+         width: 90%;
+         /* 留一點邊距給第一個和最後一個文字 */
+         margin: 40px auto;
+         /* 增加上下邊距，給文字留空間 */
+         height: 4px;
+         }
+         /* 2. 製作貫穿所有點的背景虛線 */
+         .route-track::before {
+         content: "";
+         position: absolute;
+         top: 50%;
+         left: 0;
+         right: 0;
+         height: 3px;
+         border-top: 3px dashed var(--shin-blue);
+         transform: translateY(-50%);
+         z-index: 1;
+         /* 放在點的下面 */
+         }
+         /* 3. 確保點和文字在虛線上方 */
+         .route-dot {
+         position: absolute;
+         top: 50%;
+         width: 12px;
+         height: 12px;
+         background: var(--shin-red);
+         border: 2px solid #333;
+         border-radius: 50%;
+         transform: translate(-50%, -50%);
+         z-index: 2;
+         }
+         /* 4. 讓文字標籤乖乖待在點的下方 */
+         .route-label {
+         position: absolute;
+         top: 20px;
+         left: 50%;
+         transform: translateX(-50%);
+         white-space: nowrap;
+         font-size: 11px;
+         font-weight: 700;
+         color: #333;
+         }
+         @keyframes shiro-hop {
+         0%,
+         100% {
+         transform: translateX(-50%) translateY(0);
+         }
+         50% {
+         transform: translateX(-50%) translateY(-8px);
+         }
+         }
+         .running-shiro {
+         position: absolute;
+         width: 42px;
+         /* 稍微放大一點 */
+         bottom: 50px;
+         /* 讓牠踩在線上 */
+         z-index: 100;
+         /* 確保在最上層 */
+         transform: translateX(-50%);
+         transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+         animation: shiro-hop 0.6s infinite ease-in-out;
+         iframe {
+         background-color: #eee;
+         margin-bottom: 20px;
+         }
+         }
+         /* Pin 圖標的樣式定義 */
+         .pin-path {
+         stroke: #333;
+         stroke-width: 2;
+         }
+         .pin-dot {
+         fill: white;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="detailPage" class="detail-page">
+         <div class="back-btn" onclick="closeDetail()">⬅ 回到計畫表</div>
+         <div id="detailContent"></div>
+      </div>
+      <div class="phone-container">
+         <div class="header-section">
+            <h1>🎄 聖誕動感大作戰 🎅</h1>
+            <p style="margin:5px 0; font-size:0.9rem; font-weight:700;">嘿嘿～點擊卡片看我的秘密攻略！</p>
+         </div>
+         <div class="route-map-container">
+            <svg class="wave-svg" viewBox="0 0 400 110">
+               <line x1="40" y1="60" x2="360" y2="60" class="wave-path-static" />
+               <g transform="translate(40, 60)">
+                  <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946"
+                     stroke="#333" stroke-width="2" />
+                  <circle cx="0" cy="-18" r="3" fill="white" />
+                  <text y="25" text-anchor="middle" class="svg-text">海港城</text>
+               </g>
+               <g transform="translate(145, 60)">
+                  <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8"
+                     stroke="#333" stroke-width="2" />
+                  <circle cx="0" cy="-18" r="3" fill="white" />
+                  <text y="25" text-anchor="middle" class="svg-text">西九</text>
+               </g>
+               <g transform="translate(255, 60)">
+                  <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#FFD166"
+                     stroke="#333" stroke-width="2" />
+                  <circle cx="0" cy="-18" r="3" fill="white" />
+                  <text y="25" text-anchor="middle" class="svg-text">利東街</text>
+               </g>
+               <g transform="translate(360, 60)">
+                  <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946"
+                     stroke="#333" stroke-width="2" />
+                  <circle cx="0" cy="-18" r="3" fill="white" />
+                  <text y="25" text-anchor="middle" class="svg-text">馬灣</text>
+               </g>
+            </svg>
+            <img id="shiroTracker" class="running-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 10%;"
+               alt="小白">
+         </div>
+         <div class="tabs">
+            <button id="btn1" class="tab-btn active" onclick="switchDay(1)">12/25 九龍港島</button>
+            <button id="btn2" class="tab-btn" onclick="switchDay(2)">12/26 馬灣慢活</button>
+         </div>
+         <div id="day1" class="day-content active">
+            <div class="event-card" onclick="openDetail('harbour')">
+               <div class="time-badge">13:30 - 16:00</div>
+               <div class="card-title">🚢 海港城：捕捉小姐姐之旅</div>
+               <div class="photo-box">
+                  <img src="https://www.harbourcity.com.hk/media/WhatsApp-Image-2025-11-14-at-20.18.11_852ebc68.jpg?auto=format&fit=crop&w=400"
+                     alt="海港城">
+               </div>
+               <div class="card-desc">「嘿嘿～芊芊要抓緊我的手喔！不然我會跑去跟別的小姐姐合照喔！」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('westk')">
+               <div class="time-badge" style="background:var(--shin-blue)">16:00 - 17:30</div>
+               <div class="card-title">🌳 西九：大人的浪漫野餐</div>
+               <div class="photo-box">
+                  <img src="https://res.klook.com/image/upload/v1732681640/nlribht3koyb2nxpyxuf.jpg?auto=format&fit=crop&w=400"
+                     alt="西九">
+               </div>
+               <div class="card-desc">「坐在草地吹海風，看這棵大大的聖誕樹，這就是小新追求的『大人的浪漫』～呼～」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('starferry')">
+               <div class="time-badge" style="background:var(--shin-yellow); color:#333;">17:30 - 18:15</div>
+               <div class="card-title">⛴️ 天星小輪：動感光波視角</div>
+               <div class="photo-box">
+                  <img src="https://www.starferry.com.hk/sites/default/files/hire2.jpg?auto=format&fit=crop&w=400"
+                     alt="西九">
+               </div>
+               <div class="card-desc">「看！維港兩岸在發光耶！這就是傳說中的『動感光波』視角，哇哈哈～」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('leetung')">
+               <div class="time-badge">19:30 - 21:00</div>
+               <div class="card-title">✨ 利東街：下雪驚喜！</div>
+               <div class="photo-box">
+                  <img src="https://media.timeout.com/images/106343172/750/422/image.jpg?auto=format&fit=crop&w=400"
+                     alt="利東街雪景">
+               </div>
+               <div class="card-desc">「哇～下雪了耶！芊芊妳看，在雪裡的妳比漂亮的大姐姐還要漂亮喔～(臉紅)」</div>
+            </div>
+         </div>
+         <div id="day2" class="day-content">
+            <div class="event-card" onclick="openDetail('breakfast')">
+               <div class="time-badge">10:00</div>
+               <div class="card-title">🥐 豐盛早餐：睡飽飽</div>
+               <div class="photo-box">
+                  <img src="https://i0.wp.com/we4-travel.com/wp-content/uploads/2025/07/Mawan-1868-10.jpg?w=2048&quality=89&ssl=1"
+                     alt="西九">
+               </div>
+               <div class="card-desc">「享用美味早餐，這就是懶洋洋的小白生活～」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('noah')">
+               <div class="time-badge" style="background:var(--shin-blue)">11:30</div>
+               <div class="card-title">🦖 挪亞方舟 / 太陽館</div>
+               <div class="photo-box"><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/57/Noahspark.JPG?auto=format&fit=crop&w=400">
+               </div>
+               <div class="card-desc">「來看巨大的方舟囉！如果不去園區，我們就去太陽館看大望遠鏡！」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('mawan-cafe')">
+               <div class="time-badge" style="background:var(--shin-yellow); color:#333;">13:00</div>
+               <div class="card-title">🍝 午餐：歐陸風情 Cafe</div>
+               <div class="photo-box">
+                  <img src="https://static8.orstatic.com/userphoto2/photo/1F/14LH/080OQF323E75B20AF6F78Flx.jpg?og=1?auto=format&fit=crop&w=400"
+                     alt="西九">
+               </div>
+               <div class="card-desc">「看海吃輕食，芊芊，這杯拿鐵有我的屁屁拉花嗎？」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('tsingma')">
+               <div class="time-badge" style="background:var(--shin-blue)">15:00</div>
+               <div class="card-title">🏖️ 馬灣東灣沙灘</div>
+               <div class="photo-box">
+                  <img src="https://dw-media.tkww.hk/epaper/hker/20240709/TXT_JPG/p06-b.jpg?auto=format&fit=crop&w=400"
+                     alt="馬灣東灣沙灘">
+               </div>
+               <div class="card-desc">「哇～大橋就在眼前耶！芊芊，我們去沙灘踩浪花吧！」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('la-rosabelle')">
+               <div class="time-badge" style="background:var(--shin-red)">18:30</div>
+               <div class="card-title">🍴 浪漫晚餐：La Rosabelle</div>
+               <div class="photo-box">
+                  <img src="https://static7.orstatic.com/userphoto3/photo/2P/24XP/0F73QU9258D767FA999221bx.jpg?auto=format&fit=crop&w=400">
+               </div>
+               <div class="card-desc">「在海邊吃浪漫大餐，芊芊，這就是我的誠意喔！」</div>
+            </div>
+            <div class="event-card" onclick="openDetail('airport')">
+               <div class="time-badge" style="background:gray">21:30</div>
+               <div class="photo-box">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Boarding_area_entrance_of_HZMB_Hong_Kong_Port_%2820181024095129%29.jpg/2560px-Boarding_area_entrance_of_HZMB_Hong_Kong_Port_%2820181024095129%29.jpg?auto=format&fit=crop&w=400"
+                     alt="西九">
+               </div>
+               <div class="card-title">✈️ 終點站：機場</div>
+               <div class="card-desc">「要回家了，好捨不得喔... 約好了喔，明年也要一起！」</div>
+            </div>
+         </div>
+      </div>
+      <script>
+         const detailData = {
+             'harbour': {
+                 title: '🚢 海港城：捕捉小姐姐之旅',
+                 body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path class="wave-path-static" d="M 40 60 Q 120 20, 200 60 T 360 60" />
+                 
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">🏠 出發</text>
+                 </g>
+         
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">🎄 海港城</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 45%; bottom: 45px;">
+         </div>
+         
+         嘿嘿～芊芊，妳看！這裡的人比小白身上的毛還要多耶！<br><br>
+         
+         <b>【動感超人作戰計畫】</b><br><br>
+         
+         1. <b>佔領聖誕大樹：</b> 我們要先衝向海運大廈門口。<br><br>
+         
+         <div class="photo-box">
+             <img src="https://i.imgur.com/kgRLyhB.jpeg">
+         </div>
+         <p style="font-size: 0.85rem; text-align: center; color: #666; margin-top: -5px;">▲ 小新老師示範：顯腿長的動感拍照姿</p>
+         
+         2. <b>變身專業攝影師：</b> 把手機拿低低的，拍出來的芊芊才會苗條美麗！<br><br>
+         
+         <div class="shin-box">
+             <b>小新私房筆記：</b><br>
+             如果芊芊累了，我可以表演「屁屁外星人」給妳看！
+         </div><br>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" style="border:3px solid #333; border-radius: 20px; background:#eee;" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.8791039864274!2d114.16450687611598!3d22.292078643209564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3404008da6035099%3A0xc39f99767a42167d!2z5rW35riv5Z-O!5e0!3m2!1szh-TW!2shk!4v1700000000000" allowfullscreen></iframe>
+         `
+             },
+             'westk': {
+    title: '🌳 西九：動感聖誕小鎮與巨型聖誕樹',
+    body: `
+        <div class="inner-route-container">
+            <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                <path d="M 40 60 C 120 10, 280 110, 360 60" 
+                      fill="none" 
+                      stroke="#FFD166" 
+                      stroke-width="3" 
+                      stroke-dasharray="8, 8" />
+                
+                <g transform="translate(40, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">🚢 海港城</text>
+                </g>
+        
+                <g transform="translate(360, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">🎄 聖誕小鎮</text>
+                </g>
+            </svg>
+            <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 30%; bottom: 55px;">
+        </div>
+        
+        「嘿嘿～芊芊，快看那棵聖誕樹！高到我脖子都要斷掉啦，這就是傳說中的大人的浪漫嗎？」<br><br>
+
+        <b>🎄 2024 西九聖誕大亮點：</b><br>
+        1. <b>巨型聖誕樹：</b> 超過 20 米高的巨塔聖誕樹，亮燈後比動感超人的閃光還耀眼！<br><br>
+        2. <b>冬日巡禮小鎮：</b> 草坪上佈滿了無數的小聖誕樹和麋鹿，芊芊，我們去小屋子裡找聖誕老公公要巧克比吧！<br><br>
+        3. <b>維港燈光匯演：</b> 晚上 8 點還會有特別的燈光表演，看著對岸的燈光，芊芊妳的臉紅通通的真可愛～<br><br>
+        
+        <div class="photo-box">
+            <img src="https://i.imgur.com/M82SNwb.jpeg">
+        </div>
+        <p style="font-size: 0.8rem; text-align: center; color: #666; margin-top: 5px;">▲ 小新：這裡的燈光跟芊芊一樣閃亮亮～</p>
+        
+        <div class="shin-box">
+            <b>小新私房筆記：</b><br>
+            「芊芊，聽說聖誕小鎮人很多，妳要牽緊我的手才不會被漂亮的大姐姐... 喔不，才不會迷路喔！」
+        </div><br>
+        
+        <b>📍 地圖連結：</b><br>
+         <b>📍 地圖連結：</b><br>
+         <iframe width="100%" height="250" 
+         style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18688.245038993235!2d114.14816258295825!3d22.285723561499076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3404009073ba01e3%3A0xd0f7e713fb8495cc!2z6KW_5Lmd5paH5YyW5Y2A!5e0!3m2!1szh-TW!2sus!4v1766460128898!5m2!1szh-TW!2sus" 
+         allowfullscreen="" 
+         loading="lazy" 
+         referrerpolicy="no-referrer-when-downgrade">
+         </iframe>
+         `
+         },
+             'starferry': {
+    title: '⛴️ 天星小輪：動感航行與維港燈飾',
+    body: `
+        <div class="inner-route-container">
+            <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                <path d="M 40 80 Q 100 60, 200 80 T 360 80" fill="none" stroke="#0077B6" stroke-width="3" stroke-dasharray="10, 5" />
+                <g transform="translate(40, 80)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                    <text y="25" text-anchor="middle" class="svg-text">中碼頭</text>
+                </g>
+                <g transform="translate(360, 80)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                    <text y="25" text-anchor="middle" class="svg-text">📍 尖沙咀</text>
+                </g>
+            </svg>
+            <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 45%; bottom: 45px;">
+        </div>
+
+        「呼～這艘船好大喔！芊芊，快看對岸那些閃亮的燈飾，是不是在慶祝我們今天的約會？」<br><br>
+
+        <b>🌊 【小新推薦：海上浪漫攻略】</b><br>
+        1. <b>必選二樓上層：</b> 芊芊我們快跑！搶佔上層靠窗的木長椅，這裡的風吹過來最涼快了，還能看清楚海上的波浪喔！<br><br>
+        2. <b>動感光波亮燈：</b> 剛好接近 18:00 亮燈，兩岸的高樓大廈會突然發出『動感光波』！聖誕燈飾全亮的時候，感覺我就像電影裡的超級英雄一樣帥！<br><br>
+        3. <b>鹹鹹的海風：</b> 吹著海風，感覺我的帥氣度提升了 500%！雖然髮型會亂掉，但為了芊芊，我可以忍耐喔～<br><br>
+
+        <div class="shin-box">
+            <b>小新私房筆記：</b><br>
+            「如果船晃得很厲害，芊芊可以扶著我的肩膀喔，雖然我的肩膀還在發育，但絕對很可靠的！」
+        </div><br>
+    `
+},
+             'leetung': {
+    title: '✨ 利東街：歐陸風飄雪奇蹟',
+    body: `
+        <div class="inner-route-container">
+            <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                <path d="M 40 60 C 120 110, 280 10, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
+                <g transform="translate(40, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">下午茶</text>
+                </g>
+                <g transform="translate(360, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">📍 利東街</text>
+                </g>
+            </svg>
+            <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 60%; bottom: 65px;">
+        </div>
+
+        「嘿嘿～芊芊，快看妳的頭上... 有白白的雪耶！雖然我的臉臉已經凍得紅通通了，但只要牽著妳的手就很暖和喔～」<br><br>
+
+        <b>❄️ 【小新與芊芊的壓軸驚喜】</b><br>
+        1. <b>復古歐陸大街：</b> 走在利東街就像變身成大人的約會場景。兩旁的燈飾比美冴的項鍊還要閃亮，芊芊我們來比賽誰拍的照片最美！<br><br>
+        2. <b>冬日飄雪匯演：</b> 定時噴出的白雪真的好夢幻喔！我會準確地把外套披在妳身上——這就是爸爸常說的『大人的浪漫』，嘿嘿！<br><br>
+        3. <b>聖誕心願：</b> 在巨大的聖誕球燈飾下，我已經許好願望了喔！除了希望巧克比能無限供應，最重要是明年也要跟芊芊一起過節！<br><br>
+
+        <div class="photo-box">
+            <img src="https://media.timeout.com/images/106345610/image.jpg?auto=format&fit=crop&w=400">
+        </div>
+
+        <div class="shin-box">
+            <b>小新私房筆記：</b><br>
+            「芊芊妳看，那些雪花掉在妳的睫毛上，真的好漂亮喔... 哎呀，我臉紅才不是因為冷呢！」
+        </div><br>
+
+        <b>📍 地圖在這裡：</b><br>
+        <iframe width="100%" height="250" 
+            style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.056832540497!2d114.1724837!3d22.2758369!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3404005cb7a88909%3A0x1a529b724b67b00a!2z5Yip5p2x6KGX!5e0!3m2!1szh-TW!2shk!4v1766550298570!5m2!1szh-TW!2shk" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    `
+},
+             /* --- Day 2 內頁數據 --- */
+         
+         'breakfast': {
+         title: '🥐 豐盛早餐：彩色小屋與貓店長',
+         body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path d="M 40 60 C 120 10, 280 110, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">🛏️ 懶床</text>
+                 </g>
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">📍 Heato x Phare</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 30%; bottom: 65px;">
+         </div>
+         
+         「呼哈～芊芊，早上的空氣比美冴的拳頭還要清新耶！」<br><br>
+         
+         <b>🏠 店舖：Heato x Phare</b><br>
+         📍 地址：香港馬灣馬灣大街 52 號 3 號屋 (位於馬灣 1868 文創區)<br>
+         ⏰ 營業時間：09:30 – 19:00 (每天營業)<br>
+         📞 電話：+852 9611 1581<br><br>
+         
+         <b>【小新推薦：三大必看重點】</b><br>
+         1. <b>藍白打卡聖地：</b> 這家 Cafe 在彩色小屋區，藍白色調超有地中海風情，拍照起來芊芊一定更迷人！<br>
+         2. <b>尋找貓店長：</b> 聽說店裡有隻叫「粒粒」的貓店長，小白你要乖乖跟人家打招呼，不准亂吠喔。<br>
+         3. <b>招牌必點：</b> 一定要試試他們的 <b>Full Day Breakfast</b> 和裝在精美杯子裡的 <b>土耳其咖啡</b>。<br><br>
+         
+         <div class="shin-box">
+             <b>小新私房筆記：</b><br>
+             「坐在這裡可以看到汲水門大橋喔～芊芊，如果我偷喝一口妳的咖啡，會不會立刻變成可靠的大人呢？」
+         </div><br>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" 
+             style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.1417910285604!2d114.05268889271576!3d22.348274388697842!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403ff004e016a1f%3A0xe79d08946db7c185!2sHeato%20x%20Phare!5e0!3m2!1szh-TW!2sus!4v1766460290106!5m2!1szh-TW!2sus" 
+             allowfullscreen="" 
+             loading="lazy" 
+             referrerpolicy="no-referrer-when-downgrade">
+         </iframe>
+         `
+         },
+         
+         'noah': {
+         title: '🦖 挪亞方舟：動感冒險',
+         body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path d="M 40 60 C 120 110, 280 10, 360 60" fill="none" stroke="#00B4D8" stroke-width="3" stroke-dasharray="8, 8" />
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#FFD166" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">咖啡廳</text>
+                 </g>
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">方舟</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 70%; bottom: 65px;">
+         </div>
+         
+         「哇！芊芊妳看，這艘船比爸爸的腳臭味還要驚人！好多動物都在排隊耶～」<br><br>
+         
+         1. <b>1:1 動物雕塑：</b> 這裡有 67 對等比例動物，芊芊我們去跟長頸鹿比身高，看誰比較接近天空！<br><br>
+         2. <b>太陽館：</b> 去看全亞洲最大的真空太陽望遠鏡，看太陽會不會跟我的屁屁一樣紅通通？<br><br>
+         3. <b>夢想星球：</b> 超夢幻的森林光影互動，芊芊走進去就像仙女下凡一樣，我會牽好妳的手喔！<br><br>
+         
+         <div class="photo-box">
+             <img src="https://www.getreadyhk.com/images/stories/blog/ying/noahsark/noahsark-07.jpeg?auto=format&fit=crop&w=400">
+         </div>
+         
+         
+         <div class="shin-box">
+             <b>小新私房筆記：</b><br>
+             「這裡很大，芊芊走累了要跟我說，我的肩膀隨時給妳靠喔！（雖然有點窄）」
+         </div>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" 
+             style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.913734521522!2d114.05876860932601!3d22.351064555833638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403f94d4d2d484d%3A0xdfa91a5d8366611e!2z5oyq5Lqe5pa56Iif5Li76aGM5YWs5ZyS!5e0!3m2!1szh-TW!2sus!4v1766460411303!5m2!1szh-TW!2sus" 
+             allowfullscreen="" 
+             loading="lazy" 
+             referrerpolicy="no-referrer-when-downgrade">
+         </iframe>
+         `
+         },
+         
+         'mawan-cafe': {
+    title: '🍝 SOL Committee：文青露營風',
+    body: `
+        <div class="inner-route-container">
+            <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                <path d="M 40 60 Q 200 10, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
+                <g transform="translate(40, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">方舟</text>
+                </g>
+                <g transform="translate(360, 60)">
+                    <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                    <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                    <text y="25" text-anchor="middle" class="svg-text">SOL</text>
+                </g>
+            </svg>
+            <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 50%; bottom: 65px;">
+        </div>
+
+        「這裡有一種成熟大人的味道，牆壁灰灰的好像沒蓋好（誤）... 喔不是啦，這叫工業風！芊芊我們進去吧～」<br><br>
+
+        <b>🏠 店舖：SOL Committee</b><br>
+        📍 地址：馬灣大街村中 1A 地舖<br>
+        ⏰ 營業時間：11:00 – 18:00 (視情況而定)<br><br>
+
+        <b>【小新推薦：必吃重點】</b><br>
+        1. <b>露營風佈置：</b> 店裡有露營椅和木箱桌子，感覺好像我們兩個去無人島探險一樣，嘿嘿！<br>
+        2. <b>招牌美食：</b> 聽說這裡的 <b>手工意粉</b> 和 <b>窩夫 (Waffles)</b> 超級好吃，芊芊妳吃一口，剩下的我幫妳解決！<br>
+        3. <b>打卡牆：</b> 門口的水泥牆拍起來超有 Feel，小白你站過去，我要幫芊芊拍一張雜誌封面的照片。<br><br>
+
+        <div class="photo-box">
+            <img src="https://static8.orstatic.com/userphoto2/photo/22/1MKN/0BKIXBAD7DEF458905FB53lv.jpg?auto=format&fit=crop&w=400">
+        </div>
+
+        <b>📍 地圖在這裡：</b><br>
+        <iframe width="100%" height="250" 
+            style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.0991837168176!2d114.0613041!3d22.349883499999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403f93a058ec921%3A0xae1ed383f0d33526!2z5aSq6Zm957O75aeU5ZOh5pyD!5e0!3m2!1szh-TW!2shk!4v1766548992713!5m2!1szh-TW!2shk" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+        <div class="shin-box">
+            <b>小新筆記：</b><br>
+            「這裡的咖啡好像很厲害，但我還是比較想喝芊芊喝過的吸管...啊！沒事！我是說可樂！」
+        </div>
+    `
+},
+         
+         'tsingma': {
+         title: '🏖️ 馬灣東灣沙灘：超震撼海景',
+         body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path d="M 40 60 Q 200 10, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">方舟</text>
+                 </g>
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">📍 東灣沙灘</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 50%; bottom: 65px;">
+         </div>
+         
+         「哇～芊芊妳看！這座橋大到連我的屁屁都遮不住耶... 喔不，我是說好壯觀喔！」<br><br>
+         
+         📍 <b>地點：馬灣東灣泳灘 (Tung Wan Beach)</b><br><br>
+         
+         1. <b>橋景第一排：</b> 這裡是全香港看青馬大橋最清楚的地方。芊芊，我們來比賽看誰先數完橋上有幾盞燈？<br><br>
+         2. <b>赤腳慢步：</b> 這裡的沙很細喔，跟小白的毛一樣軟綿綿的。我們可以脫掉鞋子，踩著浪花等夕陽。<br><br>
+         3. <b>浪漫告白位：</b> 趁著大橋亮燈的瞬間，我有一句很重要（但絕對不是要巧克比）的話想對妳說...<br><br>
+         
+         <div class="photo-box">
+             <img src="https://www.hongkongd.com/wp-content/uploads/2021/07/Ma-Wan_7_Pier_8.jpg?auto=format&fit=crop&w=400">
+         </div>
+         
+         <div class="shin-box">
+             <b>小新私房筆記：</b><br>
+             「芊芊，如果待會風太大妳覺得冷，我可以把我的紅背心借妳穿喔（雖然可能有點小）！」
+         </div>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" 
+         style="border:3px solid #333; border-radius: 20px; background:#eee;" 
+         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.0895214396364!2d114.05909862695835!3d22.35024839107997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403f94d7046caab%3A0x8bdc83077a378a63!2z6aas54Gj5p2x54Gj5rOz54GY!5e0!3m2!1szh-TW!2sus!4v1766461075358!5m2!1szh-TW!2sus" 
+         allowfullscreen="" 
+         loading="lazy" 
+         referrerpolicy="no-referrer-when-downgrade">
+         </iframe>
+         
+         `
+         },
+         
+         'la-rosabelle': {
+         title: '🍴 La Rosabelle：浪漫歐陸晚餐',
+         body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path d="M 40 60 C 120 10, 280 110, 360 60" fill="none" stroke="#E63946" stroke-width="3" stroke-dasharray="8, 8" />
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">觀景台</text>
+                 </g>
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">📍 餐廳</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 60%; bottom: 35px;">
+         </div>
+         
+         「芊芊妳看，這裡的燈光好漂亮，跟妳的眼睛一樣閃亮閃亮的喔～」<br><br>
+         
+         <b>🏠 店舖：La Rosabelle Bar & Grill (Ma Wan)</b><br>
+         📍 地址：馬灣珀麗灣沙灘商場 1 樓 6 號舖<br>
+         ⏰ 營業時間：11:00 – 22:00<br>
+         📞 電話：+852 2311 3512<br><br>
+         
+         <b>【小新推薦：浪漫晚餐重點】</b><br>
+         1. <b>海濱第一排：</b> 餐廳就在珀麗灣沙灘商場，露天位置可以一邊吹著海風，一邊近距離欣賞青馬大橋的絕美夜景。<br><br>
+         2. <b>歐陸氛圍：</b> 裝潢非常有異國情調。芊芊，今晚妳就是我的動感女主角，我們一起慶祝聖誕吧！<br><br>
+         3. <b>精緻美食：</b> 這裡的歐陸菜式份量十足。芊芊，如果牛排太厚切不開，我可以幫妳服務喔（嘿嘿）！<br><br>
+         
+         <div class="shin-box">
+             <b>小新私房筆記：</b><br>
+             「吃完晚餐還可以去旁邊的沙灘散步喔～芊芊，我會牽好妳的手，絕對不會讓妳掉進水裡的！」
+         </div><br>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" style="border:3px solid #333; border-radius: 20px; background:#eee;" loading="lazy" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.015594978429!2d114.06208500000001!3d22.353040000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403f92759b63a39%3A0x38ccec270d10c24d!2sLa%20Rosabelle%20Bar%20%26%20Grill!5e0!3m2!1szh-TW!2sus!4v1766459399090!5m2!1szh-TW!2sus" 
+             allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"></iframe>
+         `
+         },
+         
+         'airport': {
+         title: '✈️ 終點站：機場約定',
+         body: `
+         <div class="inner-route-container">
+             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
+                 <path d="M 40 60 Q 200 110, 360 60" fill="none" stroke="#333" stroke-width="3" stroke-dasharray="8, 8" />
+                 <g transform="translate(40, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#E63946" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">馬灣</text>
+                 </g>
+                 <g transform="translate(360, 60)">
+                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#333" class="pin-path"/>
+                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
+                     <text y="25" text-anchor="middle" class="svg-text">機場</text>
+                 </g>
+             </svg>
+             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 50%; bottom: 25px;">
+         </div>
+         「要回家了，好捨不得喔... 雖然我的手很短，但我會一直揮手揮到芊芊看不見為止！」<br><br>
+         
+         1. <b>最後的回憶：</b> 在機場把這兩天的照片傳給芊芊，每一張都要標註『小新很帥』喔。<br><br>
+         2. <b>聖誕約定：</b> 下次約會，我一定會變成更可靠的男人（還有長高 5 公分）！<br><br>
+         
+         <div class="shin-box">
+             <b>小新的約定：</b><br>
+             「芊芊，明年聖誕節，也絕對、絕對要跟我約會喔！約好了喔！」
+         </div>
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" style="border:3px solid #333; border-radius: 20px; background:#eee;" loading="lazy" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4834.578759750298!2d113.95182048237061!3d22.316321670758008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403e33e37fedf23%3A0xab1330e67986da40!2z5riv54-g5r6z5aSn5qmL6aaZ5riv5Y-j5bK45peF5qqi5aSn5qiT!5e0!3m2!1szh-TW!2sus!4v1766460004185!5m2!1szh-TW!2sus" allowfullscreen></iframe>
+         `
+         }
+         };
+         
+         function switchDay(day) {
+             document.querySelectorAll('.day-content').forEach(el => el.classList.remove('active'));
+             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+             document.getElementById('day' + day).classList.add('active');
+             document.getElementById('btn' + day).classList.add('active');
+         
+             const shiro = document.getElementById('shiroTracker');
+             // 對齊左側第一個 Pin (海港城) 和右側最後一個 Pin (馬灣)
+             // 這裡的百分比是相對於外層容器的寬度
+             if (day === 1) {
+                 shiro.style.left = "10%";
+             } else {
+                 shiro.style.left = "90%";
+             }
+         }
+         
+         function openDetail(id) {
+             const data = detailData[id];
+             document.getElementById('detailContent').innerHTML = `
+                  <div class="detail-title">${data.title}</div>
+                  <div class="detail-body">${data.body}</div>
+              `;
+             document.getElementById('detailPage').classList.add('active');
+             document.body.style.overflow = 'hidden';
+         }
+         
+         function closeDetail() {
+             document.getElementById('detailPage').classList.remove('active');
+             document.body.style.overflow = 'auto';
+         }
+         
+         // --- 手機右滑返回功能 ---
+let touchStartX = 0;
+let touchEndX = 0;
+
+// 監聽詳細資訊容器
+const modal = document.getElementById('detail-modal');
+
+modal.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+modal.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleGesture();
+}, { passive: true });
+
+function handleGesture() {
+    // 滑動距離門檻 (例如大於 100px)
+    const swipeThreshold = 100;
+    
+    // 如果 結束位置 - 開始位置 > 門檻，代表是往右滑
+    if (touchEndX - touchStartX > swipeThreshold) {
+        // 觸發你原本的關閉函數
+        if (typeof closeDetail === "function") {
+            closeDetail();
+        }
+    }
+}
+      </script>
+   </body>
+</html>
