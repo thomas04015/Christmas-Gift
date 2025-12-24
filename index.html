@@ -353,6 +353,117 @@
          .pin-dot {
          fill: white;
          }
+         /* 底部導覽列 */
+         .bottom-action-bar {
+         position: fixed;
+         bottom: 20px;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 90%;
+         max-width: 400px;
+         background: rgba(255, 255, 255, 0.85);
+         backdrop-filter: blur(10px);
+         border: 3px solid #333;
+         border-radius: 50px;
+         height: 70px;
+         z-index: 9999;
+         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+         }
+         .bar-container {
+         display: flex;
+         height: 100%;
+         align-items: center;
+         justify-content: space-around;
+         }
+         .bar-item {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         cursor: pointer;
+         transition: transform 0.1s;
+         }
+         .bar-item:active { transform: scale(0.9); }
+         .bar-icon { font-size: 24px; }
+         /* 控制小新風格圖標的大小 */
+         .shin-icon-img {
+         width: 28px;        /* 縮小比例，類似 Emoji 大小 */
+         height: 28px;
+         object-fit: contain; /* 保持比例不變形 */
+         display: block;
+         margin: 0 auto;
+         /* 增加一點點卡通感的律動 */
+         transition: transform 0.1s ease;
+         }
+         /* 點擊時的縮放回饋 */
+         .bar-item:active .shin-icon-img {
+         transform: scale(0.85);
+         }
+         /* 確保 Label 的文字不會太擠 */
+         .bar-label {
+         font-size: 11px;
+         margin-top: 4px;
+         font-weight: bold;
+         color: #333;
+         }
+         .bar-divider {
+         width: 2px;
+         height: 30px;
+         background: #333;
+         opacity: 0.2;
+         }
+         /* 記事本彈窗 */
+         .note-overlay {
+         display: none;
+         position: fixed;
+         top: 0; left: 0; width: 100%; height: 100%;
+         background: rgba(0,0,0,0.6);
+         z-index: 10000;
+         justify-content: center;
+         align-items: center;
+         }
+         .note-window {
+         background: #fff;
+         width: 85%;
+         max-width: 350px;
+         border: 3px solid #333;
+         border-radius: 20px;
+         padding: 20px;
+         animation: notePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+         }
+         @keyframes notePop {
+         from { transform: scale(0.8); opacity: 0; }
+         to { transform: scale(1); opacity: 1; }
+         }
+         .note-header {
+         display: flex;
+         justify-content: space-between;
+         font-weight: bold;
+         font-size: 18px;
+         margin-bottom: 15px;
+         }
+         #note-input {
+         width: 100%;
+         height: 150px;
+         border: 2px solid #eee;
+         border-radius: 12px;
+         padding: 12px;
+         font-size: 16px;
+         box-sizing: border-box;
+         resize: none;
+         background: #fdfdfd;
+         }
+         .note-save-btn {
+         width: 100%;
+         background: #E63946;
+         color: white;
+         border: 3px solid #333;
+         border-radius: 50px;
+         padding: 12px;
+         margin-top: 15px;
+         font-weight: bold;
+         font-size: 16px;
+         }
       </style>
    </head>
    <body>
@@ -493,6 +604,81 @@
             </div>
          </div>
       </div>
+      <div class="bottom-action-bar">
+         <div class="bar-container">
+            <label class="bar-item">
+               <input type="file" accept="image/*" capture="camera" style="display: none;">
+               <div class="bar-icon">
+                  <img src="https://i.imgur.com/05bKpG3.png" class="shin-icon-img" alt="相機">
+               </div>
+               <div class="bar-label">拍芊芊</div>
+            </label>
+            <div class="bar-divider"></div>
+            <div class="bar-item" onclick="toggleAchievement(true)">
+               <div class="bar-icon">
+                  <img src="https://i.imgur.com/uQWxSxm.png" class="shin-icon-img" alt="成就">
+               </div>
+               <div class="bar-label">大冒險</div>
+            </div>
+            <div class="bar-divider"></div>
+            <div class="bar-item" onclick="toggleNote(true)">
+               <div class="bar-icon">
+                  <img src="https://i.imgur.com/m0A61nz.png" class="shin-icon-img" alt="筆記">
+               </div>
+               <div class="bar-label">悄悄話</div>
+            </div>
+         </div>
+      </div>
+      <div id="achievement-overlay" class="note-overlay">
+         <div class="note-window" style="background: #fffcf0;">
+            <div class="note-header">
+               <span>🔥 Day 2 冒險清單</span>
+               <button onclick="toggleAchievement(false)" style="background:none; border:none; font-size:24px; cursor:pointer;">×</button>
+            </div>
+            <div class="achievement-list" style="display: flex; flex-direction: column; gap: 18px; text-align: left; margin: 15px 0;">
+               <label class="check-item">
+               <input type="checkbox" onchange="updateProgress()">
+               <span class="custom-check"></span>
+               <span class="check-text">在馬灣沙灘看著青馬大橋跟芊芊許願</span>
+               </label>
+               <label class="check-item">
+               <input type="checkbox" onchange="updateProgress()">
+               <span class="custom-check"></span>
+               <span class="check-text">跟芊芊一起在挪亞方舟前拍出大片</span>
+               </label>
+               <label class="check-item">
+               <input type="checkbox" onchange="updateProgress()">
+               <span class="custom-check"></span>
+               <span class="check-text">在機場尋找到最適合送給芊芊的聖誕禮物</span>
+               </label>
+               <label class="check-item">
+               <input type="checkbox" onchange="updateProgress()">
+               <span class="custom-check"></span>
+               <span class="check-text">成功完成兩日一夜的「聖誕芊秋」大冒險！</span>
+               </label>
+            </div>
+            <div class="progress-container" style="width: 100%; height: 12px; background: #eee; border-radius: 10px; margin-top: 20px; border: 2px solid #333; overflow: hidden;">
+               <div id="mission-bar" class="progress-bar" style="width: 0%; height: 100%; background: #E63946; transition: width 0.3s;"></div>
+            </div>
+            <div id="mission-status" class="mission-status" style="font-size: 13px; text-align: center; margin-top: 8px; font-weight: bold; color: #333;">完成度：0% (Day 2 加油，小新！)</div>
+            <button class="note-save-btn" 
+               style="width: 100%; background: #FFD166; color: #333; border: 3px solid #333; border-radius: 50px; padding: 12px; margin-top: 20px; font-weight: bold; cursor: pointer;" 
+               onclick="toggleAchievement(false)">繼續陪芊芊冒險！</button>
+         </div>
+      </div>
+      <div id="note-overlay" class="note-overlay">
+         <div class="note-window" style="background: #fff;">
+            <div class="note-header">
+               <span>📓 給芊芊的悄悄話</span>
+               <button onclick="toggleNote(false)" style="background:none; border:none; font-size:24px; cursor:pointer;">×</button>
+            </div>
+            <textarea id="note-input" placeholder="記下跟芊芊的甜蜜瞬間..." 
+               style="width: 100%; height: 150px; border: 2px solid #eee; border-radius: 12px; padding: 12px; font-size: 16px; box-sizing: border-box; resize: none; background: #fdfdfd;"></textarea>
+            <button class="note-save-btn" 
+               style="width: 100%; background: #E63946; color: white; border: 3px solid #333; border-radius: 50px; padding: 12px; margin-top: 15px; font-weight: bold; font-size: 16px;" 
+               onclick="saveNote()">儲存這份感動！</button>
+         </div>
+      </div>
       <script>
          const detailData = {
              'harbour': {
@@ -540,9 +726,9 @@
          `
              },
              'westk': {
-    title: '🌳 西九：動感聖誕小鎮與巨型聖誕樹',
-    body: `
-        <div class="inner-route-container">
+         title: '🌳 西九：動感聖誕小鎮與巨型聖誕樹',
+         body: `
+         <div class="inner-route-container">
             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
                 <path d="M 40 60 C 120 10, 280 110, 360 60" 
                       fill="none" 
@@ -555,7 +741,7 @@
                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
                     <text y="25" text-anchor="middle" class="svg-text">🚢 海港城</text>
                 </g>
-        
+         
                 <g transform="translate(360, 60)">
                     <path d="M0 0 C-5 -5 -10 -12 -10 -18 A 10 10 0 1 1 10 -18 C 10 -12 5 -5 0 0" fill="#00B4D8" class="pin-path"/>
                     <circle cx="0" cy="-18" r="3" class="pin-dot"/>
@@ -563,26 +749,26 @@
                 </g>
             </svg>
             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 30%; bottom: 55px;">
-        </div>
-        
-        「嘿嘿～芊芊，快看那棵聖誕樹！高到我脖子都要斷掉啦，這就是傳說中的大人的浪漫嗎？」<br><br>
-
-        <b>🎄 2024 西九聖誕大亮點：</b><br>
-        1. <b>巨型聖誕樹：</b> 超過 20 米高的巨塔聖誕樹，亮燈後比動感超人的閃光還耀眼！<br><br>
-        2. <b>冬日巡禮小鎮：</b> 草坪上佈滿了無數的小聖誕樹和麋鹿，芊芊，我們去小屋子裡找聖誕老公公要巧克比吧！<br><br>
-        3. <b>維港燈光匯演：</b> 晚上 8 點還會有特別的燈光表演，看著對岸的燈光，芊芊妳的臉紅通通的真可愛～<br><br>
-        
-        <div class="photo-box">
+         </div>
+         
+         「嘿嘿～芊芊，快看那棵聖誕樹！高到我脖子都要斷掉啦，這就是傳說中的大人的浪漫嗎？」<br><br>
+         
+         <b>🎄 2024 西九聖誕大亮點：</b><br>
+         1. <b>巨型聖誕樹：</b> 超過 20 米高的巨塔聖誕樹，亮燈後比動感超人的閃光還耀眼！<br><br>
+         2. <b>冬日巡禮小鎮：</b> 草坪上佈滿了無數的小聖誕樹和麋鹿，芊芊，我們去小屋子裡找聖誕老公公要巧克比吧！<br><br>
+         3. <b>維港燈光匯演：</b> 晚上 8 點還會有特別的燈光表演，看著對岸的燈光，芊芊妳的臉紅通通的真可愛～<br><br>
+         
+         <div class="photo-box">
             <img src="https://i.imgur.com/M82SNwb.jpeg">
-        </div>
-        <p style="font-size: 0.8rem; text-align: center; color: #666; margin-top: 5px;">▲ 小新：這裡的燈光跟芊芊一樣閃亮亮～</p>
-        
-        <div class="shin-box">
+         </div>
+         <p style="font-size: 0.8rem; text-align: center; color: #666; margin-top: 5px;">▲ 小新：這裡的燈光跟芊芊一樣閃亮亮～</p>
+         
+         <div class="shin-box">
             <b>小新私房筆記：</b><br>
             「芊芊，聽說聖誕小鎮人很多，妳要牽緊我的手才不會被漂亮的大姐姐... 喔不，才不會迷路喔！」
-        </div><br>
-        
-        <b>📍 地圖連結：</b><br>
+         </div><br>
+         
+         <b>📍 地圖連結：</b><br>
          <b>📍 地圖連結：</b><br>
          <iframe width="100%" height="250" 
          style="border:3px solid #333; border-radius: 20px; background:#eee;" 
@@ -594,9 +780,9 @@
          `
          },
              'starferry': {
-    title: '⛴️ 天星小輪：動感航行與維港燈飾',
-    body: `
-        <div class="inner-route-container">
+         title: '⛴️ 天星小輪：動感航行與維港燈飾',
+         body: `
+         <div class="inner-route-container">
             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
                 <path d="M 40 80 Q 100 60, 200 80 T 360 80" fill="none" stroke="#0077B6" stroke-width="3" stroke-dasharray="10, 5" />
                 <g transform="translate(40, 80)">
@@ -609,25 +795,25 @@
                 </g>
             </svg>
             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 45%; bottom: 45px;">
-        </div>
-
-        「呼～這艘船好大喔！芊芊，快看對岸那些閃亮的燈飾，是不是在慶祝我們今天的約會？」<br><br>
-
-        <b>🌊 【小新推薦：海上浪漫攻略】</b><br>
-        1. <b>必選二樓上層：</b> 芊芊我們快跑！搶佔上層靠窗的木長椅，這裡的風吹過來最涼快了，還能看清楚海上的波浪喔！<br><br>
-        2. <b>動感光波亮燈：</b> 剛好接近 18:00 亮燈，兩岸的高樓大廈會突然發出『動感光波』！聖誕燈飾全亮的時候，感覺我就像電影裡的超級英雄一樣帥！<br><br>
-        3. <b>鹹鹹的海風：</b> 吹著海風，感覺我的帥氣度提升了 500%！雖然髮型會亂掉，但為了芊芊，我可以忍耐喔～<br><br>
-
-        <div class="shin-box">
+         </div>
+         
+         「呼～這艘船好大喔！芊芊，快看對岸那些閃亮的燈飾，是不是在慶祝我們今天的約會？」<br><br>
+         
+         <b>🌊 【小新推薦：海上浪漫攻略】</b><br>
+         1. <b>必選二樓上層：</b> 芊芊我們快跑！搶佔上層靠窗的木長椅，這裡的風吹過來最涼快了，還能看清楚海上的波浪喔！<br><br>
+         2. <b>動感光波亮燈：</b> 剛好接近 18:00 亮燈，兩岸的高樓大廈會突然發出『動感光波』！聖誕燈飾全亮的時候，感覺我就像電影裡的超級英雄一樣帥！<br><br>
+         3. <b>鹹鹹的海風：</b> 吹著海風，感覺我的帥氣度提升了 500%！雖然髮型會亂掉，但為了芊芊，我可以忍耐喔～<br><br>
+         
+         <div class="shin-box">
             <b>小新私房筆記：</b><br>
             「如果船晃得很厲害，芊芊可以扶著我的肩膀喔，雖然我的肩膀還在發育，但絕對很可靠的！」
-        </div><br>
-    `
-},
+         </div><br>
+         `
+         },
              'leetung': {
-    title: '✨ 利東街：歐陸風飄雪奇蹟',
-    body: `
-        <div class="inner-route-container">
+         title: '✨ 利東街：歐陸風飄雪奇蹟',
+         body: `
+         <div class="inner-route-container">
             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
                 <path d="M 40 60 C 120 110, 280 10, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
                 <g transform="translate(40, 60)">
@@ -642,34 +828,34 @@
                 </g>
             </svg>
             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 60%; bottom: 65px;">
-        </div>
-
-        「嘿嘿～芊芊，快看妳的頭上... 有白白的雪耶！雖然我的臉臉已經凍得紅通通了，但只要牽著妳的手就很暖和喔～」<br><br>
-
-        <b>❄️ 【小新與芊芊的壓軸驚喜】</b><br>
-        1. <b>復古歐陸大街：</b> 走在利東街就像變身成大人的約會場景。兩旁的燈飾比美冴的項鍊還要閃亮，芊芊我們來比賽誰拍的照片最美！<br><br>
-        2. <b>冬日飄雪匯演：</b> 定時噴出的白雪真的好夢幻喔！我會準確地把外套披在妳身上——這就是爸爸常說的『大人的浪漫』，嘿嘿！<br><br>
-        3. <b>聖誕心願：</b> 在巨大的聖誕球燈飾下，我已經許好願望了喔！除了希望巧克比能無限供應，最重要是明年也要跟芊芊一起過節！<br><br>
-
-        <div class="photo-box">
+         </div>
+         
+         「嘿嘿～芊芊，快看妳的頭上... 有白白的雪耶！雖然我的臉臉已經凍得紅通通了，但只要牽著妳的手就很暖和喔～」<br><br>
+         
+         <b>❄️ 【小新與芊芊的壓軸驚喜】</b><br>
+         1. <b>復古歐陸大街：</b> 走在利東街就像變身成大人的約會場景。兩旁的燈飾比美冴的項鍊還要閃亮，芊芊我們來比賽誰拍的照片最美！<br><br>
+         2. <b>冬日飄雪匯演：</b> 定時噴出的白雪真的好夢幻喔！我會準確地把外套披在妳身上——這就是爸爸常說的『大人的浪漫』，嘿嘿！<br><br>
+         3. <b>聖誕心願：</b> 在巨大的聖誕球燈飾下，我已經許好願望了喔！除了希望巧克比能無限供應，最重要是明年也要跟芊芊一起過節！<br><br>
+         
+         <div class="photo-box">
             <img src="https://media.timeout.com/images/106345610/image.jpg?auto=format&fit=crop&w=400">
-        </div>
-
-        <div class="shin-box">
+         </div>
+         
+         <div class="shin-box">
             <b>小新私房筆記：</b><br>
             「芊芊妳看，那些雪花掉在妳的睫毛上，真的好漂亮喔... 哎呀，我臉紅才不是因為冷呢！」
-        </div><br>
-
-        <b>📍 地圖在這裡：</b><br>
-        <iframe width="100%" height="250" 
+         </div><br>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" 
             style="border:3px solid #333; border-radius: 20px; background:#eee;" 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.056832540497!2d114.1724837!3d22.2758369!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3404005cb7a88909%3A0x1a529b724b67b00a!2z5Yip5p2x6KGX!5e0!3m2!1szh-TW!2shk!4v1766550298570!5m2!1szh-TW!2shk" 
             allowfullscreen="" 
             loading="lazy" 
             referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-    `
-},
+         </iframe>
+         `
+         },
              /* --- Day 2 內頁數據 --- */
          
          'breakfast': {
@@ -769,9 +955,9 @@
          },
          
          'mawan-cafe': {
-    title: '🍝 SOL Committee：文青露營風',
-    body: `
-        <div class="inner-route-container">
+         title: '🍝 SOL Committee：文青露營風',
+         body: `
+         <div class="inner-route-container">
             <svg class="wave-svg" viewBox="0 0 400 110" preserveAspectRatio="none">
                 <path d="M 40 60 Q 200 10, 360 60" fill="none" stroke="#FFD166" stroke-width="3" stroke-dasharray="8, 8" />
                 <g transform="translate(40, 60)">
@@ -786,38 +972,38 @@
                 </g>
             </svg>
             <img class="inner-shiro" src="https://i.imgur.com/0qdulrL.png" style="left: 50%; bottom: 65px;">
-        </div>
-
-        「這裡有一種成熟大人的味道，牆壁灰灰的好像沒蓋好（誤）... 喔不是啦，這叫工業風！芊芊我們進去吧～」<br><br>
-
-        <b>🏠 店舖：SOL Committee</b><br>
-        📍 地址：馬灣大街村中 1A 地舖<br>
-        ⏰ 營業時間：11:00 – 18:00 (視情況而定)<br><br>
-
-        <b>【小新推薦：必吃重點】</b><br>
-        1. <b>露營風佈置：</b> 店裡有露營椅和木箱桌子，感覺好像我們兩個去無人島探險一樣，嘿嘿！<br>
-        2. <b>招牌美食：</b> 聽說這裡的 <b>手工意粉</b> 和 <b>窩夫 (Waffles)</b> 超級好吃，芊芊妳吃一口，剩下的我幫妳解決！<br>
-        3. <b>打卡牆：</b> 門口的水泥牆拍起來超有 Feel，小白你站過去，我要幫芊芊拍一張雜誌封面的照片。<br><br>
-
-        <div class="photo-box">
+         </div>
+         
+         「這裡有一種成熟大人的味道，牆壁灰灰的好像沒蓋好（誤）... 喔不是啦，這叫工業風！芊芊我們進去吧～」<br><br>
+         
+         <b>🏠 店舖：SOL Committee</b><br>
+         📍 地址：馬灣大街村中 1A 地舖<br>
+         ⏰ 營業時間：11:00 – 18:00 (視情況而定)<br><br>
+         
+         <b>【小新推薦：必吃重點】</b><br>
+         1. <b>露營風佈置：</b> 店裡有露營椅和木箱桌子，感覺好像我們兩個去無人島探險一樣，嘿嘿！<br>
+         2. <b>招牌美食：</b> 聽說這裡的 <b>手工意粉</b> 和 <b>窩夫 (Waffles)</b> 超級好吃，芊芊妳吃一口，剩下的我幫妳解決！<br>
+         3. <b>打卡牆：</b> 門口的水泥牆拍起來超有 Feel，小白你站過去，我要幫芊芊拍一張雜誌封面的照片。<br><br>
+         
+         <div class="photo-box">
             <img src="https://static8.orstatic.com/userphoto2/photo/22/1MKN/0BKIXBAD7DEF458905FB53lv.jpg?auto=format&fit=crop&w=400">
-        </div>
-
-        <b>📍 地圖在這裡：</b><br>
-        <iframe width="100%" height="250" 
+         </div>
+         
+         <b>📍 地圖在這裡：</b><br>
+         <iframe width="100%" height="250" 
             style="border:3px solid #333; border-radius: 20px; background:#eee;" 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3690.0991837168176!2d114.0613041!3d22.349883499999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3403f93a058ec921%3A0xae1ed383f0d33526!2z5aSq6Zm957O75aeU5ZOh5pyD!5e0!3m2!1szh-TW!2shk!4v1766548992713!5m2!1szh-TW!2shk" 
             allowfullscreen="" 
             loading="lazy" 
             referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-
-        <div class="shin-box">
+         </iframe>
+         
+         <div class="shin-box">
             <b>小新筆記：</b><br>
             「這裡的咖啡好像很厲害，但我還是比較想喝芊芊喝過的吸管...啊！沒事！我是說可樂！」
-        </div>
-    `
-},
+         </div>
+         `
+         },
          
          'tsingma': {
          title: '🏖️ 馬灣東灣沙灘：超震撼海景',
@@ -978,26 +1164,96 @@
              document.body.style.overflow = 'auto';
          }
          
-         // --- 內頁下拉返回功能 ---
-let modalTouchStart = 0;
-const detailModal = document.getElementById('detail-modal');
-
-// 監聽手指觸碰起始點
-detailModal.addEventListener('touchstart', (e) => {
-    modalTouchStart = e.touches[0].pageY;
-}, { passive: true });
-
-// 監聽手指滑動過程
-detailModal.addEventListener('touchmove', (e) => {
-    const touchY = e.touches[0].pageY;
-    const scrollTop = detailModal.scrollTop; // 檢查目前內頁捲動的位置
-
-    // 條件：1. 已經捲動到最頂端 2. 手指是往下滑 (目前的 Y > 起始 Y)
-    if (scrollTop <= 0 && touchY > modalTouchStart + 80) { 
-        // 80 是下拉的門檻距離，可以根據手感調整
-        closeDetail(); 
-    }
-}, { passive: true });
+         // --- 手機右滑返回功能 ---
+         let touchStartX = 0;
+         let touchEndX = 0;
+         
+         // 監聽詳細資訊容器
+         const modal = document.getElementById('detail-modal');
+         
+         modal.addEventListener('touchstart', e => {
+         touchStartX = e.changedTouches[0].screenX;
+         }, { passive: true });
+         
+         modal.addEventListener('touchend', e => {
+         touchEndX = e.changedTouches[0].screenX;
+         handleGesture();
+         }, { passive: true });
+         
+         function handleGesture() {
+         // 滑動距離門檻 (例如大於 100px)
+         const swipeThreshold = 100;
+         
+         // 如果 結束位置 - 開始位置 > 門檻，代表是往右滑
+         if (touchEndX - touchStartX > swipeThreshold) {
+         // 觸發你原本的關閉函數
+         if (typeof closeDetail === "function") {
+            closeDetail();
+         }
+         }
+         }
+         
+         // --- 悄悄話筆記邏輯 ---
+         function toggleNote(show) {
+         const el = document.getElementById('note-overlay');
+         if (el) el.style.display = show ? 'flex' : 'none';
+         }
+         
+         function saveNote() {
+         const content = document.getElementById('note-input').value;
+         localStorage.setItem('my_trip_note', content);
+         alert('嘿嘿～悄悄話小新已經幫你收好囉！'); // 只有筆記儲存才會跳這個
+         toggleNote(false);
+         }
+         
+         // --- 成就清單邏輯 ---
+         function toggleAchievement(show) {
+         const el = document.getElementById('achievement-overlay');
+         if (el) el.style.display = show ? 'flex' : 'none';
+         }
+         
+         // 更新進度條並儲存狀態
+         function updateProgress() {
+         const checkboxes = document.querySelectorAll('.check-item input');
+         checkboxes.forEach((cb, index) => {
+         if (cb.checked) {
+            localStorage.setItem('mission_' + index, 'true');
+         } else {
+            localStorage.removeItem('mission_' + index);
+         }
+         });
+         let checkedCount = 0;
+         
+         checkboxes.forEach((cb, index) => {
+         if (cb.checked) {
+            checkedCount++;
+            localStorage.setItem('mission_' + index, 'true');
+         } else {
+            localStorage.removeItem('mission_' + index);
+         }
+         });
+         
+         const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+         document.getElementById('mission-bar').style.width = percentage + '%';
+         
+         const status = document.getElementById('mission-status');
+         if (percentage === 100) {
+         status.innerText = "🎉 完美！今天是最棒的聖誕節！";
+         } else {
+         status.innerText = `完成度：${percentage}% (加油，小新！)`;
+         }
+         }
+         
+         // 網頁載入時恢復打勾狀態
+         window.addEventListener('load', () => {
+         const checkboxes = document.querySelectorAll('.check-item input');
+         checkboxes.forEach((cb, index) => {
+         if (localStorage.getItem('mission_' + index) === 'true') {
+            cb.checked = true;
+         }
+         });
+         updateProgress();
+         });
       </script>
    </body>
 </html>
