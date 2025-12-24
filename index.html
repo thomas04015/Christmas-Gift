@@ -978,34 +978,26 @@
              document.body.style.overflow = 'auto';
          }
          
-         // --- 手機右滑返回功能 ---
-let touchStartX = 0;
-let touchEndX = 0;
+         // --- 內頁下拉返回功能 ---
+let modalTouchStart = 0;
+const detailModal = document.getElementById('detail-modal');
 
-// 監聽詳細資訊容器
-const modal = document.getElementById('detail-modal');
-
-modal.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
+// 監聽手指觸碰起始點
+detailModal.addEventListener('touchstart', (e) => {
+    modalTouchStart = e.touches[0].pageY;
 }, { passive: true });
 
-modal.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleGesture();
-}, { passive: true });
+// 監聽手指滑動過程
+detailModal.addEventListener('touchmove', (e) => {
+    const touchY = e.touches[0].pageY;
+    const scrollTop = detailModal.scrollTop; // 檢查目前內頁捲動的位置
 
-function handleGesture() {
-    // 滑動距離門檻 (例如大於 100px)
-    const swipeThreshold = 100;
-    
-    // 如果 結束位置 - 開始位置 > 門檻，代表是往右滑
-    if (touchEndX - touchStartX > swipeThreshold) {
-        // 觸發你原本的關閉函數
-        if (typeof closeDetail === "function") {
-            closeDetail();
-        }
+    // 條件：1. 已經捲動到最頂端 2. 手指是往下滑 (目前的 Y > 起始 Y)
+    if (scrollTop <= 0 && touchY > modalTouchStart + 80) { 
+        // 80 是下拉的門檻距離，可以根據手感調整
+        closeDetail(); 
     }
-}
+}, { passive: true });
       </script>
    </body>
 </html>
